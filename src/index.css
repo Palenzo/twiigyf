@@ -1,0 +1,46 @@
+/* Global reset & tokens */
+:root {
+  --primary:        #308d46;
+  --primary-dark:   #1b6630;
+  --primary-light:  #e8f5e9;
+  --bg:             #f5f5f5;
+  --white:          #ffffff;
+  --border:         #dde1e7;
+  --text:           #1f1f1f;
+  --text-muted:     #6b7280;
+  --code-bg:        #1e1e1e;
+  --code-header:    #2d2d2d;
+  --sidebar-width:  272px;
+  --navbar-h:       58px;
+  --radius:         6px;
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.10);
+  --shadow:         0 2px 8px rgba(0,0,0,0.12);
+  --font-body:      'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-code:      'Fira Code', 'Courier New', Courier, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Reading progress bar ─────────────────────────────────────────────── */
+#progress-bar {
+  position: fixed;
+  top: var(--navbar-h);
+  left: 0;
+  height: 3px;
+  background: var(--primary);
+  z-index: 1000;
+  transition: width 0.1s linear;
+}

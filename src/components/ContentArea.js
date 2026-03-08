@@ -4,6 +4,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { apiCircuitBreaker, CircuitOpenError } from '../utils/circuitBreaker';
+import { cacheGet, cacheSet } from '../utils/apiCache';
 import './ContentArea.css';
 
 /* ── Stable code-block sub-component (own copy state) ───────────── */
@@ -107,32 +109,63 @@ function Breadcrumb({ title }) {
 export default function ContentArea({ sections }) {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
+  const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cbOpen, setCbOpen]   = useState(false);
 
-  const idx = sections.findIndex((s) => s.slug === slug);
+  const idx  = sections.findIndex((s) => s.slug === slug);
   const prev = sections[idx - 1];
   const next = sections[idx + 1];
 
   useEffect(() => {
     if (!slug) return;
+
+    // ── Tier-1: in-memory cache — instant render, no loading flash ──
+    const cacheKey = `section:${slug}`;
+    const cached   = cacheGet(cacheKey);
+    if (cached) {
+      setData(cached);
+      setLoading(false);
+      setCbOpen(false);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+
+    // ── Cache miss: fetch from API via circuit breaker ──
     setLoading(true);
     setData(null);
+    setCbOpen(false);
+
     let attempts = 0;
-    const MAX = 4;
-    const DELAYS = [0, 3000, 6000, 10000];
-    const BASE = process.env.REACT_APP_API_URL || '';
+    const MAX    = 3;
+    const DELAYS = [0, 3000, 8000];
+    const BASE   = process.env.REACT_APP_API_URL || '';
 
     const attempt = () => {
-      fetch(`${BASE}/api/sections/${slug}`)
-        .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then((d) => { setData(d); setLoading(false); window.scrollTo({ top: 0 }); })
-        .catch(() => {
+      apiCircuitBreaker
+        .call(() =>
+          fetch(`${BASE}/api/sections/${slug}`)
+            .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        )
+        .then((d) => {
+          cacheSet(cacheKey, d); // memory-only (bodies are large)
+          setData(d);
+          setLoading(false);
+          setCbOpen(false);
+          window.scrollTo({ top: 0 });
+        })
+        .catch((err) => {
+          if (err instanceof CircuitOpenError) {
+            setCbOpen(true);
+            setLoading(false);
+            return;
+          }
           attempts++;
           if (attempts < MAX) setTimeout(attempt, DELAYS[attempts]);
           else setLoading(false);
         });
     };
+
     attempt();
   }, [slug]);
 
@@ -214,6 +247,15 @@ export default function ContentArea({ sections }) {
       <div className="ca-loading">
         <div className="ca-spinner" />
         <p>Loading section…</p>
+      </div>
+    );
+  }
+
+  if (cbOpen) {
+    return (
+      <div className="ca-error">
+        ⚠️ Service temporarily unavailable — circuit breaker tripped.
+        Please wait ~30 seconds and navigate back to this section.
       </div>
     );
   }

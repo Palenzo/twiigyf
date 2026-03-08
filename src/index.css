@@ -1,24 +1,66 @@
-/* Global reset & tokens */
+/* ── Design Tokens ─────────────────────────────────────────────────── */
 :root {
+  /* Brand */
   --primary:        #308d46;
   --primary-dark:   #1b6630;
   --primary-light:  #e8f5e9;
-  --bg:             #f5f5f5;
+
+  /* Light theme surfaces */
+  --bg:             #f0f2f5;
+  --surface:        #ffffff;
   --white:          #ffffff;
   --border:         #dde1e7;
-  --text:           #1f1f1f;
+
+  /* Light theme text */
+  --text:           #1a1a2e;
   --text-muted:     #6b7280;
+  --text-sub:       #8a95a0;
+
+  /* Code (always dark) */
   --code-bg:        #1e1e1e;
   --code-header:    #2d2d2d;
+
+  /* Sizing */
   --sidebar-width:  272px;
   --navbar-h:       58px;
-  --radius:         6px;
-  --shadow-sm:      0 1px 3px rgba(0,0,0,0.10);
-  --shadow:         0 2px 8px rgba(0,0,0,0.12);
+  --radius:         12px;        /* rounder cards */
+  --radius-pill:    999px;       /* pill / oval buttons */
+  --radius-sm:      8px;
+
+  /* Elevation */
+  --shadow-sm:      0 2px 8px rgba(0,0,0,0.08);
+  --shadow:         0 4px 16px rgba(0,0,0,0.11);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.14);
+
+  /* Motion */
+  --transition:     0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Fonts */
   --font-body:      'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-code:      'Fira Code', 'Courier New', Courier, monospace;
 }
 
+/* ── Dark Theme ─────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --primary:        #4caf6e;
+  --primary-dark:   #81c784;
+  --primary-light:  #1a2e22;
+
+  --bg:             #0f1117;
+  --surface:        #181b23;
+  --white:          #181b23;
+  --border:         #2a2f3a;
+
+  --text:           #e8eaf0;
+  --text-muted:     #8892a0;
+  --text-sub:       #606878;
+
+  --shadow-sm:      0 2px 8px rgba(0,0,0,0.35);
+  --shadow:         0 4px 16px rgba(0,0,0,0.45);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.55);
+}
+
+/* ── Base ───────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; font-size: 16px; }
@@ -29,18 +71,41 @@ body {
   color: var(--text);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  transition: background var(--transition), color var(--transition);
 }
 
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* ── Reading progress bar ─────────────────────────────────────────────── */
+/* ── Reading progress bar ─────────────────────────────────────────── */
 #progress-bar {
   position: fixed;
   top: var(--navbar-h);
   left: 0;
   height: 3px;
-  background: var(--primary);
+  background: linear-gradient(90deg, var(--primary), #81c784);
   z-index: 1000;
   transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── Theme toggle button (used in Navbar) ─────────────────────────── */
+.theme-toggle {
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.3s ease;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.28);
+  transform: rotate(20deg);
 }

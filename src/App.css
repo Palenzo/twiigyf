@@ -46,18 +46,20 @@
 
 .retry-btn {
   margin-top: 8px;
-  padding: 8px 20px;
+  padding: 8px 22px;
   border: 1.5px solid var(--primary);
-  border-radius: 6px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--primary);
   font-size: 0.9rem;
+  font-family: var(--font-body);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
 }
 .retry-btn:hover {
   background: var(--primary);
   color: #fff;
+  transform: translateY(-1px);
 }
 
 /* Overlay for mobile sidebar */

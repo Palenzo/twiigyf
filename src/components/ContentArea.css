@@ -13,11 +13,12 @@
 .article {
   flex: 1;
   min-width: 0;
-  background: var(--white);
+  background: var(--surface);
   border-radius: var(--radius);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   padding: 28px 36px 36px;
+  transition: background var(--transition), border-color var(--transition);
 }
 
 /* ── Breadcrumb ──────────────────────────────────────────────────── */
@@ -54,20 +55,22 @@
 }
 .tag {
   display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 600;
+  transition: background var(--transition);
 }
 .tag.green {
   background: var(--primary-light);
   color: var(--primary-dark);
-  border: 1px solid #c8e6c9;
+  border: 1px solid var(--primary);
+  opacity: 0.9;
 }
 .tag.gray {
-  background: #f1f3f5;
-  color: #555;
-  border: 1px solid #ddd;
+  background: var(--bg);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
 }
 
 .art-divider {
@@ -96,10 +99,10 @@
   padding-left: 12px;
   background: var(--primary-light);
   padding: 8px 12px;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 .art-body h3 { font-size: 17px; color: var(--primary-dark); }
-.art-body h4 { font-size: 15.5px; color: #333; font-weight: 700; }
+.art-body h4 { font-size: 15.5px; color: var(--text); font-weight: 700; }
 
 .para { margin-bottom: 14px; }
 
@@ -125,23 +128,28 @@
 
 /* ── Inline code ─────────────────────────────────────────────────── */
 .ic {
-  background: #f0f4ff;
-  color: #c7254e;
+  background: var(--primary-light);
+  color: #b5364a;
   font-family: var(--font-code);
   font-size: 13.5px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  border: 1px solid #dce4f8;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   white-space: nowrap;
+}
+[data-theme="dark"] .ic {
+  background: #1f2733;
+  color: #ff8fa3;
+  border-color: #2e3a4a;
 }
 
 /* ── Code block ──────────────────────────────────────────────────── */
 .code-block {
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
   margin: 18px 0;
   border: 1px solid #2a2a2a;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.22);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.28);
 }
 
 .cb-header {
@@ -163,12 +171,12 @@
   background: rgba(255,255,255,0.1);
   color: #ccc;
   border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   padding: 3px 10px;
   font-size: 12px;
   cursor: pointer;
   font-family: var(--font-body);
-  transition: background 0.2s, color 0.2s;
+  transition: background var(--transition), color var(--transition);
 }
 .cb-copy:hover { background: rgba(255,255,255,0.2); color: #fff; }
 
@@ -202,6 +210,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  background: var(--surface);
 }
 .gfg-tbl thead tr {
   background: var(--primary);
@@ -213,19 +222,20 @@
   font-weight: 600;
   white-space: nowrap;
 }
-.gfg-tbl tbody tr { transition: background 0.1s; }
-.gfg-tbl tbody tr:nth-child(even) { background: #f9fffe; }
-.gfg-tbl tbody tr:hover { background: var(--primary-light); }
+.gfg-tbl tbody tr { transition: background var(--transition); }
+.gfg-tbl tbody tr:nth-child(even) { background: var(--primary-light); opacity: 0.55; }
+.gfg-tbl tbody tr:hover { background: var(--primary-light); opacity: 1; }
 .gfg-tbl td {
   padding: 9px 14px;
-  border-top: 1px solid #eef2ef;
+  border-top: 1px solid var(--border);
   vertical-align: top;
   line-height: 1.5;
+  color: var(--text);
 }
 
 /* ── Callout / blockquote ────────────────────────────────────────── */
 .callout {
-  background: #fff8e1;
+  background: #fffbea;
   border-left: 4px solid #ffc107;
   border-radius: 0 var(--radius) var(--radius) 0;
   padding: 12px 16px;
@@ -233,6 +243,10 @@
   font-size: 14.5px;
 }
 .callout p { margin: 0; }
+[data-theme="dark"] .callout {
+  background: #242010;
+  border-left-color: #e6a817;
+}
 
 /* ── Right-side TOC ──────────────────────────────────────────────── */
 .page-toc {
@@ -241,7 +255,7 @@
   position: sticky;
   top: calc(var(--navbar-h) + 28px);
   align-self: flex-start;
-  background: var(--white);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 14px 16px;
@@ -252,6 +266,7 @@
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
   font-size: 13px;
+  transition: background var(--transition), border-color var(--transition);
 }
 .page-toc::-webkit-scrollbar { width: 3px; }
 .page-toc::-webkit-scrollbar-thumb { background: var(--border); }
@@ -280,9 +295,9 @@
   font-size: 12.5px;
   line-height: 1.5;
   display: block;
-  padding: 4px 6px;
-  border-radius: 3px;
-  transition: background 0.15s, color 0.15s;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), color var(--transition);
 }
 .toc-link:hover {
   background: var(--primary-light);
@@ -304,19 +319,21 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--white);
+  background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   padding: 12px 18px;
   cursor: pointer;
   font-family: var(--font-body);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  color: var(--text);
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
   max-width: 46%;
 }
 .nav-btn:hover {
   border-color: var(--primary);
   background: var(--primary-light);
-  box-shadow: 0 2px 8px rgba(48,141,70,0.15);
+  box-shadow: 0 4px 12px rgba(48,141,70,0.18);
+  transform: translateY(-1px);
 }
 
 .nav-arrow {
@@ -336,15 +353,15 @@
   background: none;
   border: 1.5px solid var(--primary);
   color: var(--primary);
-  border-radius: 20px;
-  padding: 6px 18px;
+  border-radius: var(--radius-pill);
+  padding: 6px 22px;
   font-size: 13px;
   font-family: var(--font-body);
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
 }
-.back-top:hover { background: var(--primary); color: #fff; }
+.back-top:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
 
 /* ── Loading / error ─────────────────────────────────────────────── */
 .ca-loading,

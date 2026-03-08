@@ -1,9 +1,9 @@
 /* ── Layout wrapper ──────────────────────────────────────────────── */
 .ca-outer {
   display: flex;
-  justify-content: center;
+  align-items: flex-start;
   gap: 0;
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 28px 24px 48px;
   position: relative;
@@ -13,7 +13,6 @@
 .article {
   flex: 1;
   min-width: 0;
-  max-width: 860px;
   background: var(--white);
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -272,6 +271,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  counter-reset: none;
 }
 .toc-list li { margin-bottom: 2px; }
 

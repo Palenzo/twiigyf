@@ -77,15 +77,15 @@ function PageTOC({ subsections }) {
   return (
     <aside className="page-toc">
       <div className="toc-title">Contents</div>
-      <ol className="toc-list">
+      <ul className="toc-list">
         {subsections.map((sub) => (
           <li key={sub.anchor}>
             <a href={`#${sub.anchor}`} className="toc-link">
-              {sub.title}
+              {sub.title.replace(/^\d+\.\s*/, '')}
             </a>
           </li>
         ))}
-      </ol>
+      </ul>
     </aside>
   );
 }
@@ -212,9 +212,6 @@ export default function ContentArea({ sections }) {
 
   return (
     <div className="ca-outer">
-      {/* Right TOC */}
-      <PageTOC subsections={data.subsections} />
-
       {/* Article */}
       <article className="article">
         <Breadcrumb title={data.title} />
@@ -268,6 +265,9 @@ export default function ContentArea({ sections }) {
           ↑ Back to Top
         </button>
       </article>
+
+      {/* Right TOC */}
+      <PageTOC subsections={data.subsections} />
     </div>
   );
 }

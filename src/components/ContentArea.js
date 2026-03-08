@@ -118,10 +118,22 @@ export default function ContentArea({ sections }) {
     if (!slug) return;
     setLoading(true);
     setData(null);
-    fetch(`${process.env.REACT_APP_API_URL || ''}/api/sections/${slug}`)
-      .then((r) => r.json())
-      .then((d) => { setData(d); setLoading(false); window.scrollTo({ top: 0 }); })
-      .catch(() => setLoading(false));
+    let attempts = 0;
+    const MAX = 4;
+    const DELAYS = [0, 3000, 6000, 10000];
+    const BASE = process.env.REACT_APP_API_URL || '';
+
+    const attempt = () => {
+      fetch(`${BASE}/api/sections/${slug}`)
+        .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then((d) => { setData(d); setLoading(false); window.scrollTo({ top: 0 }); })
+        .catch(() => {
+          attempts++;
+          if (attempts < MAX) setTimeout(attempt, DELAYS[attempts]);
+          else setLoading(false);
+        });
+    };
+    attempt();
   }, [slug]);
 
   /* react-markdown custom components */

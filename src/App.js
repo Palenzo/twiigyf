@@ -11,12 +11,25 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const API_BASE = process.env.REACT_APP_API_URL || '';
+  const [waking, setWaking] = useState(false);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/sections`)
-      .then((r) => r.json())
-      .then((data) => { setSections(data); setLoading(false); })
-      .catch(() => setLoading(false));
+    let attempts = 0;
+    const MAX = 5;
+    const DELAYS = [0, 3000, 6000, 10000, 15000];
+
+    const attempt = () => {
+      if (attempts > 0) setWaking(true);
+      fetch(`${API_BASE}/api/sections`)
+        .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then((data) => { setSections(data); setLoading(false); setWaking(false); })
+        .catch(() => {
+          attempts++;
+          if (attempts < MAX) setTimeout(attempt, DELAYS[attempts]);
+          else { setLoading(false); setWaking(false); }
+        });
+    };
+    attempt();
   }, [API_BASE]);
 
   /* Reading progress */
@@ -46,7 +59,7 @@ function App() {
           {loading ? (
             <div className="splash">
               <div className="spinner" />
-              <p>Loading guide…</p>
+              <p>{waking ? '⏳ Server is waking up, please wait…' : 'Loading guide…'}</p>
             </div>
           ) : (
             <Routes>

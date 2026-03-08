@@ -80,7 +80,7 @@
 }
 
 /* ── Article body Typography ─────────────────────────────────────── */
-.art-body { font-size: 15.5px; line-height: 1.75; color: #1f1f1f; }
+.art-body { font-size: 15.5px; line-height: 1.75; color: var(--text); }
 
 .art-body h1,
 .art-body h2,
@@ -124,7 +124,7 @@
   text-underline-offset: 2px;
 }
 
-.content-strong { color: #1a1a1a; font-weight: 700; }
+.content-strong { color: var(--text); font-weight: 700; }
 
 /* ── Inline code ─────────────────────────────────────────────────── */
 .ic {
